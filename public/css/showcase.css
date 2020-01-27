@@ -1,0 +1,64 @@
+.graph-display {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 35%;
+}
+
+.graph-display:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.center-pos {
+    position: absolute;
+    top: 60%;
+    left: 48%;
+    border: 2px black solid;
+}
+
+.left-pos {
+    position: absolute;
+    top: 48%;
+    left: 45%;
+    border: 2px black solid;
+}
+
+.grid-cell {
+    position: absolute;
+    background-color: #0a0;
+    border: 1px black solid;
+    z-index: 5;
+}
+
+/*.grid-cell:after {*/
+/*    content: "";*/
+/*    display: block;*/
+/*    padding-bottom: 100%;*/
+/*}*/
+
+.node {
+    width: 5%;
+    background-color: #0a0;
+    border-radius: 50%;
+    z-index: 20;
+}
+
+.node:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.edge {
+    width: 8%;
+    background-color: #aa00aa;
+    z-index: 10;
+}
+
+.edge:before {
+    content: "";
+    display: block;
+    padding-top: 25%;
+}
