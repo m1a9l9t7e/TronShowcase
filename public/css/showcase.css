@@ -1,8 +1,19 @@
+.graph-display-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 50%;
+}
+
+.graph-display-container:after {
+    content: "";
+    display: block;
+}
+
 .graph-display {
     position: relative;
     top: 0;
     left: 0;
-    width: 35%;
 }
 
 .graph-display:after {
@@ -61,4 +72,8 @@
     content: "";
     display: block;
     padding-top: 25%;
+}
+
+.title-icon {
+    width: 50px;
 }

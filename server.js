@@ -7,7 +7,7 @@ const app = express();
 const server = Server(app);
 
 // ========== MONGODB ==========
-const database = require('./database');
+// const database = require('./database');
 
 // ========== SOCKET.IO ==========
 const io = require("socket.io")(server);
