@@ -1,14 +1,26 @@
+let players = {
+    "player1": {color: "#0000ff"},
+    "player2": {color: "#ff0000"}
+};
+
 $(document).ready(function () {
+    let body = new ExhibitBody('foo', 5, 5);
+    let body2 = new ExhibitBody('baz', 4, 4);
     new Exhibit(
         random_description,
-        new ExhibitBody('foo', 4, 4),
+        body,
         "cover-container"
     );
     new Exhibit(
         seeker_description,
-        new ExhibitBody('bar', 10, 10),
+        body2,
         "cover-container"
     );
+    $('#dev-button').click(function () {
+        let sequence = (new SequenceGenerator(["player1", "player2"])).generate();
+        body.run(sequence);
+        body2.run(sequence);
+    })
 });
 
 
@@ -58,6 +70,8 @@ class ExhibitBody {
     show_graph;
     obstacle_generator;
     clickable;
+    animation_delay = 200;
+    reset_delay = 500;
 
     constructor(id, cells_x, cells_y, show_graph, obstacle_generator, clickable) {
         this.id = id;
@@ -77,7 +91,7 @@ class ExhibitBody {
                 let cell_id = this.id + '-cell-' + x + '-' + y;
                 $('#' + this.id).append(
                     // '<div id="' + cell_id + '" class="grid-cell">' + x + '|' + y + '</div>'
-                    '<div id="' + cell_id + '" class="grid-cell"></div>'
+                    '<div id="' + cell_id + '" class="grid-cell grid-cell-' + this.id +'"></div>'
                 );
                 $('#' + cell_id).css({
                     'width': cell_width + '%',
@@ -95,8 +109,38 @@ class ExhibitBody {
                '</div>'
     }
 
-    run() {
+    run(sequence) {
+        let last_step = 0;
+        for (let i = 0; i < sequence.length; i++) {
+            let step = sequence[i].step;
+            let moves = sequence[i].moves;
+            for (let j = 0; j < moves.length; j++) {
+                let move = moves[j];
+                let player = move.player;
+                let x = move.x;
+                let y = move.y;
+                let cell_id = this.id + '-cell-' + x + '-' + y;
+                $('#' + cell_id)
+                    .delay(step * this.animation_delay)
+                    .queue(function (next) {
+                        $(this).css('background-color', players[player].color);
+                        next();
+                    });
+            }
+            last_step = step;
+        }
+        let this_function = this.run;
+        $('#' + this.id)
+            .delay(last_step * this.animation_delay + this.reset_delay)
+            .queue(function (next) {
+                $('.grid-cell').css('background-color', '#ffffff');
+                next();
+            });
 
+        // this needs to be executed after last_step * this.animation_delay + this.reset_delay
+        // setTimeout(this.run, last_step * this.animation_delay + this.reset_delay, sequence);
+        // $('#cover-container').animate(undefined, last_step * this.animation_delay + this.reset_delay, undefined, this.run(sequence))
+        // this.run(sequence)
     }
 }
 

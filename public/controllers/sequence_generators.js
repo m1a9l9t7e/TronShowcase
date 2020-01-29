@@ -26,4 +26,4 @@ class SequenceGenerator {
 
 let gen = new SequenceGenerator(["player1", "player2"]);
 let sequence = gen.generate();
-console.log(JSON.stringify(sequence));
+// console.log(JSON.stringify(sequence));

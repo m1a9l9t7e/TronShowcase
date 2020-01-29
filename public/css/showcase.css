@@ -38,7 +38,7 @@
 
 .grid-cell {
     position: absolute;
-    background-color: #0a0;
+    background-color: #ffffff;
     border: 1px black solid;
     z-index: 5;
 }
