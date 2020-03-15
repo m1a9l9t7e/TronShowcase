@@ -1,0 +1,84 @@
+Inside the mind of a Tron Algorithm:
+
+In this interactive Article I would love to show you - step by step - the core ideas and insights that led
+to the development of an Algorithm for the game Tron like the one you see below:
+
+<Exhibit here showcasing a late stage ai>
+
+Whenever you see an Exhibit like this one, feel free to click anywhere on the grid to change
+the playing field and see how the different algorithms react!
+
+The final algorithm can be a bit daunting, as is often the case with ideas and products that
+have gone through many iterations of development.
+But I promise you will understand all of it and might come out a smarter person at the end.
+
+So lets start at the very beginning.
+
+# The Nothing Algorithm
+
+What is the easiest thing we can do to start off? Well, nothing really.
+We just start of going in a random direction until we run into a wall and die.
+
+<showcase of nothing algorithm>
+
+# The Basic Algorithm
+
+So how do we avoid running into walls?
+We just turn left or right at will whenever there is a wall directly in front of us!
+
+<showcase of basic algorithm>
+
+As you can see this works great when the field is empty, but let's see what happens when we introduce some obstacles
+into the mix.
+
+<showcase of basic algorithm with obstacles (getting trapped)>
+
+Sadly our algorithm is not very good at dealing with dead ends and finds itself dead a lot of the time :(.
+You might also have noticed that it is not very efficient in using up the space it has and often makes choices that
+cost it a lot of available space.
+
+# The Space Loving Algorithm
+
+So how do we fix this problem? How do we avoid the dead ends?
+The answer is the Space Loving Algorithm. (Joke about actual space).
+How does it work? At each step, the algorithm checks which move (left, right, forward) leads to it having the most space
+and goes there.
+Since dead ends usually have very little space, the algorithm is very good at avoiding them.
+Let's watch it in action, on the left we have our Basic Algorithm, on the right our new Space Loving Algorithm.
+
+<parallel showcase of Basic Algorithm and Space Loving Algorithm>
+
+The Space Loving Algorithm works well to avoid dead ends, but it is still a bit greedy.
+This means that it will always choose to do the thing that gives it the most space in this exact turn. It doesn't really think ahead very well.
+(Similar to a child in the marshmallow test, eating the marshmallow straight away.)
+
+
+# Now fight
+
+Let's make things a bit more interesting shall we?
+Let's put our two Algorithms in a cage and duke it out.
+
+<showcase of Basic vs Space Loving>
+
+As of right now our algorithms are basically ignoring each others existence. Let's change that!
+
+# Seeker Algorithm
+
+This algorithm seeks out the enemy like a heat seeking missile.
+Let's see how it performs against our space loving algorithm.
+
+<showcase of Space Loving vs Seeker>
+
+Looks like it is doing a good job!
+
+# Power Hungry Algorithm
+
+How do we beat the seeker Algorithm? The answer is the Power Hungry Algorithm.
+Similar to the Space Loving Algorithm, it checks how much space it can reach for each move (left, right, forward).
+But there is a catch. It only cares about the space that it can reach before it's enemy.
+Therefore it maximizes its own influence/power on the field, while minimizing the enemies influence/power.
+This can lead to situations where the Power Hungry Algorithm actually traps it's enemies since that is the most efficient
+way to take power/influence away from them.
+
+<showcase of power hungry vs seeker>
+

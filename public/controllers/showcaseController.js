@@ -4,8 +4,9 @@ let players = {
 };
 
 $(document).ready(function () {
-    let body = new ExhibitBody('foo', 5, 5);
-    let body2 = new ExhibitBody('baz', 4, 4);
+    let sequence = (new SequenceGenerator(["player1", "player2"])).generate();
+    let body = new ExhibitBody('foo', 5, 5, sequence);
+    let body2 = new ExhibitBody('baz', 10, 10, sequence);
     new Exhibit(
         random_description,
         body,
@@ -17,9 +18,12 @@ $(document).ready(function () {
         "cover-container"
     );
     $('#dev-button').click(function () {
-        let sequence = (new SequenceGenerator(["player1", "player2"])).generate();
-        body.run(sequence);
-        body2.run(sequence);
+        // body2.sequence = sequence;
+        let sequenceX = (new SequenceGenerator(["player1", "player2"])).generate();
+        body.set_sequence(sequenceX);
+        body2.set_sequence(sequenceX);
+        $('#' + body.id).trigger("start");
+        $('#' + body2.id).trigger("start");
     })
 });
 
@@ -38,10 +42,6 @@ class Exhibit {
     initialize() {
         $('#' + this.parent_container_id).append(this.description.html + this.body.html);
         this.body.populate();
-    }
-
-    run() {
-
     }
 }
 
@@ -67,20 +67,21 @@ class ExhibitBody {
     id;
     cells_x;
     cells_y;
+    sequence;
     show_graph;
     obstacle_generator;
     clickable;
     animation_delay = 200;
     reset_delay = 500;
 
-    constructor(id, cells_x, cells_y, show_graph, obstacle_generator, clickable) {
+    constructor(id, cells_x, cells_y, sequence, show_graph, obstacle_generator, clickable) {
         this.id = id;
         this.cells_x = cells_x;
         this.cells_y = cells_y;
+        this.sequence = sequence;
         this.show_graph = show_graph;
         this.obstacle_generator = obstacle_generator;
         this.clickable = clickable;
-
     }
 
     populate() {
@@ -103,44 +104,45 @@ class ExhibitBody {
         }
     }
 
-    get html() {
-        return '<div class="graph-display-container rounded shadow-lg bg-dark mx-auto my-5 p-2">\n' +
-               '    <div id="' + this.id + '" class="graph-display container"></div>\n' +
-               '</div>'
+    set_sequence(sequence) {
+        let id = this.id;
+        let animation_delay = this.animation_delay;
+        let reset_delay = this.reset_delay;
+
+        $('#' + this.id).on("start", function () {
+            for (let i = 0; i < sequence.length; i++) {
+                let moves = sequence[i].moves;
+                $('#' + id).delay(animation_delay);
+                for (let j = 0; j < moves.length; j++) {
+                    let move = moves[j];
+                    let player = move.player;
+                    let x = move.x;
+                    let y = move.y;
+                    let cell_id = id + '-cell-' + x + '-' + y;
+                    $('#' + id)
+                        .queue(function (next) {
+                            $('#' + cell_id).css('background-color', players[player].color);
+                            next();
+                        });
+
+                }
+            }
+            $('#' + id)
+                .delay(reset_delay)
+                .queue(function (next) {
+                    $('.grid-cell-' + id).css('background-color', '#ffffff');
+                    $('#' + id).trigger("start");
+                    next();
+                })
+        });
     }
 
-    run(sequence) {
-        let last_step = 0;
-        for (let i = 0; i < sequence.length; i++) {
-            let step = sequence[i].step;
-            let moves = sequence[i].moves;
-            for (let j = 0; j < moves.length; j++) {
-                let move = moves[j];
-                let player = move.player;
-                let x = move.x;
-                let y = move.y;
-                let cell_id = this.id + '-cell-' + x + '-' + y;
-                $('#' + cell_id)
-                    .delay(step * this.animation_delay)
-                    .queue(function (next) {
-                        $(this).css('background-color', players[player].color);
-                        next();
-                    });
-            }
-            last_step = step;
-        }
-        let this_function = this.run;
-        $('#' + this.id)
-            .delay(last_step * this.animation_delay + this.reset_delay)
-            .queue(function (next) {
-                $('.grid-cell').css('background-color', '#ffffff');
-                next();
-            });
 
-        // this needs to be executed after last_step * this.animation_delay + this.reset_delay
-        // setTimeout(this.run, last_step * this.animation_delay + this.reset_delay, sequence);
-        // $('#cover-container').animate(undefined, last_step * this.animation_delay + this.reset_delay, undefined, this.run(sequence))
-        // this.run(sequence)
+
+    get html() {
+        return '<div class="graph-display-container rounded shadow-lg bg-dark mx-auto my-5 p-2">\n' +
+            '    <div id="' + this.id + '" class="graph-display container"></div>\n' +
+            '</div>'
     }
 }
 
