@@ -212,11 +212,12 @@ class Evaluator {
     }
 }
 
+// Testing
+
 let c1 = [0, 0];
 let c2 = [2, 2];
 let grid = [[1, 0, 0], [0, 0, 0], [0, 0, 9]];
 
-// Testing
 let degree = Util.getDegree(c1, grid);
 let adjacent = Util.getAdjacent(c1, grid, true);
 let bfs_result = Util.bfs(c1, grid);
@@ -227,12 +228,4 @@ evaluator.addCriteria(new MaxCriteria(EvalFunctions.voronoiEval));
 evaluator.addCriteria(new MinCriteria(EvalFunctions.shortestPathEval));
 evaluator.addCriteria(new MaxCriteria(EvalFunctions.bfsEval));
 evaluator.addCriteria(new MinCriteria(EvalFunctions.degreeEval));
-
-// console.log(degree);
-// console.log(adjacent);
-// console.log(bfs_result.bfs_grid);
-// console.log(Util.print2DArray(bfs_result.bfs_grid));
-// console.log(Util.print2DArray(voronoi_result.voronoi_grid));
-// console.log(voronoi_result.metric);
-// console.log(shortest_path_result.metric);
-// console.log(evaluator.makeDecision(c1, c2, grid));
+let decision = evaluator.makeDecision(c1, c2, grid);
