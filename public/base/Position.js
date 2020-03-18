@@ -9,9 +9,9 @@ class Position {
     xVec = [1, 0, -1, 0];
     yVec = [0, -1, 0, 1];
 
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor(c) {
+        this.x = c[0];
+        this.y = c[1];
         this.direction = 0;
     }
 
@@ -24,4 +24,7 @@ class Position {
         this.direction = direction;
     }
 
+    get vector() {
+        return [this.x, this.y];
+    }
 }

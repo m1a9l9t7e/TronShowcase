@@ -74,13 +74,21 @@ class ExhibitBody {
     animation_delay = 200;
     reset_delay = 500;
 
-    constructor(id, cells_x, cells_y, sequence, show_graph, obstacle_generator, clickable) {
+    // constructor(id, cells_x, cells_y, sequence, show_graph, obstacle_generator, clickable) {
+    //     this.id = id;
+    //     this.cells_x = cells_x;
+    //     this.cells_y = cells_y;
+    //     this.sequence = sequence;
+    //     this.show_graph = show_graph;
+    //     this.obstacle_generator = obstacle_generator;
+    //     this.clickable = clickable;
+    // }
+
+    constructor(id, game, show_graph, clickable) {
         this.id = id;
-        this.cells_x = cells_x;
-        this.cells_y = cells_y;
-        this.sequence = sequence;
+        this.cells_x = game.width;
+        this.cells_y = game.height;
         this.show_graph = show_graph;
-        this.obstacle_generator = obstacle_generator;
         this.clickable = clickable;
     }
 
@@ -103,6 +111,42 @@ class ExhibitBody {
             }
         }
     }
+
+    run() {
+        let id = this.id;
+        let animation_delay = this.animation_delay;
+        let reset_delay = this.reset_delay;
+        let game = this.game;
+        game.initialize();
+
+        $('#' + this.id).on("start", function () {
+            for (let i = 0; i < sequence.length; i++) {
+                let moves = sequence[i].moves;
+                $('#' + id).delay(animation_delay);
+                for (let j = 0; j < moves.length; j++) {
+                    let move = moves[j];
+                    let player = move.player;
+                    let x = move.x;
+                    let y = move.y;
+                    let cell_id = id + '-cell-' + x + '-' + y;
+                    $('#' + id)
+                        .queue(function (next) {
+                            $('#' + cell_id).css('background-color', players[player].color);
+                            next();
+                        });
+
+                }
+            }
+            $('#' + id)
+                .delay(reset_delay)
+                .queue(function (next) {
+                    $('.grid-cell-' + id).css('background-color', '#ffffff');
+                    $('#' + id).trigger("start");
+                    next();
+                })
+        });
+    }
+
 
     set_sequence(sequence) {
         let id = this.id;

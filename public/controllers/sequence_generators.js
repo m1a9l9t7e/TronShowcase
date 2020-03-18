@@ -1,17 +1,14 @@
 class SequenceGenerator {
-    grid;
-    random_start;
+    game;
 
-    constructor(players, grid, random_start) {
-        this.grid = grid;
-        this.random_start = random_start;
-        this.players = players;
+    constructor(game) {
+        this.game = game;
     }
 
     generate() {
         let sequence = [];
         let counter = 0;
-        while (counter < 4) {
+        while (!game.isFinished()) {
             let moves = [];
             for (let i = 0; i < this.players.length; i++) {
                 let player = this.players[i];

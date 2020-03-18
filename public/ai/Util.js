@@ -120,6 +120,14 @@ class Util {
         }
         return string;
     }
+
+    static manhattanDistance(c1, c2) {
+        return (c1[0] - c2[0]) + (c1[1] - c2[1]);
+    }
+
+    static euclideanDistance(c1, c2) {
+        return Math.sqrt(Math.pow(c1[0] - c2[0], 2) + Math.pow(c1[1] - c2[1], 2));
+    }
 }
 
 class EvalFunctions {
