@@ -1,30 +1,30 @@
-let players = {
-    "player1": {color: "#0000ff"},
-    "player2": {color: "#ff0000"}
-};
-
 $(document).ready(function () {
-    let sequence = (new SequenceGenerator(["player1", "player2"])).generate();
-    let body = new ExhibitBody('foo', 5, 5, sequence);
-    let body2 = new ExhibitBody('baz', 10, 10, sequence);
+    let gameSettings = new GameSettings(5, 5, [new WallHuggingAI("huggie", '#0000ff')]);
+    let game = new Game(gameSettings);
+    let body = new ExhibitBody('foo', game, false, false);
     new Exhibit(
         random_description,
         body,
         "cover-container"
     );
+
+    let gameSettings2 = new GameSettings(6, 6, [new WallHuggingAI("huggie", '#0000ff'), new SeekerAI("seeker", '#ff0000')]);
+    let game2 = new Game(gameSettings2);
+    let body2 = new ExhibitBody('baz', game2, false, false);
     new Exhibit(
         seeker_description,
         body2,
         "cover-container"
     );
-    $('#dev-button').click(function () {
-        // body2.sequence = sequence;
-        let sequenceX = (new SequenceGenerator(["player1", "player2"])).generate();
-        body.set_sequence(sequenceX);
-        body2.set_sequence(sequenceX);
-        $('#' + body.id).trigger("start");
-        $('#' + body2.id).trigger("start");
-    })
+
+    let gameSettings3 = new GameSettings(11, 11, [new SeekerAI("seeker", '#ff0000'), new PowerHungryAI("power!", '#ff00ff')]);
+    let game3 = new Game(gameSettings3);
+    let body3 = new ExhibitBody('tartar', game3, false, false);
+    new Exhibit(
+        seeker_description,
+        body3,
+        "cover-container"
+    );
 });
 
 
@@ -41,7 +41,7 @@ class Exhibit {
 
     initialize() {
         $('#' + this.parent_container_id).append(this.description.html + this.body.html);
-        this.body.populate();
+        this.body.initialize();
     }
 }
 
@@ -69,27 +69,25 @@ class ExhibitBody {
     cells_y;
     sequence;
     show_graph;
-    obstacle_generator;
     clickable;
     animation_delay = 200;
     reset_delay = 500;
 
-    // constructor(id, cells_x, cells_y, sequence, show_graph, obstacle_generator, clickable) {
-    //     this.id = id;
-    //     this.cells_x = cells_x;
-    //     this.cells_y = cells_y;
-    //     this.sequence = sequence;
-    //     this.show_graph = show_graph;
-    //     this.obstacle_generator = obstacle_generator;
-    //     this.clickable = clickable;
-    // }
-
     constructor(id, game, show_graph, clickable) {
         this.id = id;
+        this.game = game;
         this.cells_x = game.width;
         this.cells_y = game.height;
         this.show_graph = show_graph;
         this.clickable = clickable;
+    }
+
+    initialize() {
+        this.populate();
+        let sequenceGenerator = new SequenceGenerator(this.game);
+        this.sequence = sequenceGenerator.generate();
+        this.set_sequence(this.sequence);
+        $('#' + this.id).trigger("start");
     }
 
     populate() {
@@ -112,42 +110,6 @@ class ExhibitBody {
         }
     }
 
-    run() {
-        let id = this.id;
-        let animation_delay = this.animation_delay;
-        let reset_delay = this.reset_delay;
-        let game = this.game;
-        game.initialize();
-
-        $('#' + this.id).on("start", function () {
-            for (let i = 0; i < sequence.length; i++) {
-                let moves = sequence[i].moves;
-                $('#' + id).delay(animation_delay);
-                for (let j = 0; j < moves.length; j++) {
-                    let move = moves[j];
-                    let player = move.player;
-                    let x = move.x;
-                    let y = move.y;
-                    let cell_id = id + '-cell-' + x + '-' + y;
-                    $('#' + id)
-                        .queue(function (next) {
-                            $('#' + cell_id).css('background-color', players[player].color);
-                            next();
-                        });
-
-                }
-            }
-            $('#' + id)
-                .delay(reset_delay)
-                .queue(function (next) {
-                    $('.grid-cell-' + id).css('background-color', '#ffffff');
-                    $('#' + id).trigger("start");
-                    next();
-                })
-        });
-    }
-
-
     set_sequence(sequence) {
         let id = this.id;
         let animation_delay = this.animation_delay;
@@ -155,17 +117,18 @@ class ExhibitBody {
 
         $('#' + this.id).on("start", function () {
             for (let i = 0; i < sequence.length; i++) {
-                let moves = sequence[i].moves;
+                let changes = sequence[i].changes;
                 $('#' + id).delay(animation_delay);
-                for (let j = 0; j < moves.length; j++) {
-                    let move = moves[j];
-                    let player = move.player;
-                    let x = move.x;
-                    let y = move.y;
+                for (let j = 0; j < changes.length; j++) {
+                    let change = changes[j];
+                    let x = change.x;
+                    let y = change.y;
+                    let color = change.color;
                     let cell_id = id + '-cell-' + x + '-' + y;
+                    // console.log("Step " + i + ": changing cell with id "+ cell_id + " at coordinates " + x + "," + y + " to this color " + color);
                     $('#' + id)
                         .queue(function (next) {
-                            $('#' + cell_id).css('background-color', players[player].color);
+                            $('#' + cell_id).css('background-color', color);
                             next();
                         });
 

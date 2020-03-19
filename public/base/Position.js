@@ -15,9 +15,9 @@ class Position {
         this.direction = 0;
     }
 
-    move() {
-        this.x += this.xVec[this.direction];
-        this.y += this.yVec[this.direction];
+    move(direction) {
+        this.x += this.xVec[direction];
+        this.y += this.yVec[direction];
     }
 
     set direction(direction) {
@@ -28,3 +28,4 @@ class Position {
         return [this.x, this.y];
     }
 }
+

@@ -6,10 +6,10 @@ class Player {
     alive;
     position;
     grid;
+    playerPositions;
 
     constructor(name, color) {
         this.name = name;
-        this.id = id;
         this.color = color;
     }
 
@@ -17,6 +17,7 @@ class Player {
         this.id = id;
         this.grid = grid;
         this.position = position;
+        this.alive = true;
     }
 
     calculateNextMove() {
@@ -24,7 +25,7 @@ class Player {
     }
 
     getPlayerPositions() {
-
+        return this.playerPositions;
     }
 
     getClosestEnemyPosition() {
@@ -33,7 +34,7 @@ class Player {
         let minDistance = Number.MAX_SAFE_INTEGER;
         let minDistanceId = -1;
         for (let i = 0; i < allPlayerPositions.length; i++) {
-            if ((i + 1) === this.id) {
+            if ((i + 1) === this.id || allPlayerPositions[i] == null) {
                 continue;
             }
             let distance = Util.shortestPath(position, allPlayerPositions[i], this.grid).metric;
@@ -42,9 +43,9 @@ class Player {
                 minDistanceId = i;
             }
         }
-        if (minDistance === -1) {
+        if (minDistanceId === -1) {
             // Player is alone
-            return [0, 0]
+            return null;
         } else {
             return allPlayerPositions[minDistanceId];
         }

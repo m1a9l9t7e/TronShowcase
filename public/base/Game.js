@@ -15,18 +15,20 @@ class Game {
         this.players = gameSettings.players;
         this.width = gameSettings.width;
         this.height = gameSettings.height;
+        this.initialize();
     }
 
     initialize() {
+        this.counter = 0;
         this.grid = this.generateGrid();
         let startingPositions = this.generateStartingPositions();
         for (let i = 0; i < this.players.length; i++) {
-            let player = players[i];
+            let player = this.players[i];
             let startingPosition = startingPositions[i];
             player.initialize(i+1, Util.clone2DArray(this.grid), new Position(startingPosition));
         }
         for (let i = 0; i < this.players.length; i++) {
-            this.updateGrid(startingPositions[i], players[i].id);
+            this.updateGrid(startingPositions[i], this.players[i].id, this.players[i].color);
         }
         this.pushDisplayChanges();
     }
@@ -40,25 +42,56 @@ class Game {
             }
             grid.push(row);
         }
+        return grid;
     }
 
     generateStartingPositions() {
-        let starting_positions = null;
-        for (let i = 0; i < players.length; i++) {
-
+        let width = this.width - 1;
+        let height = this.height - 1;
+        let startingPositions = [];
+        if (this.players.length === 1) {
+            let x = Math.floor(Math.random() * width);
+            let y = Math.floor(Math.random() * height);
+            startingPositions.push([x, y])
+        } else if (this.players.length === 2) {
+            let x = Math.floor(Math.random() * width);
+            let y = Math.floor(Math.random() * height);
+            startingPositions.push([x, y]);
+            this.updateGrid([x, y], 1);
+            let x2 = width - x;
+            let y2 = height - y;
+            if (Util.checkCoordinates([x2, y2], this.grid)) {
+                startingPositions.push([x2, y2]);
+            } else {
+                startingPositions.push([x2 + ((this.width +1) % 2), y2 + ((this.height +1) % 2)])
+            }
+        } else {
+            for (let i = 0; i < this.players.length; i++) {
+                while (true) {
+                    let x = Math.floor(Math.random() * width);
+                    let y = Math.floor(Math.random() * height);
+                    if (Util.checkCoordinates([x, y], this.grid)) {
+                        startingPositions.push([x, y]);
+                        this.updateGrid([x, y], 1);
+                        break;
+                    }
+                }
+            }
         }
+        return startingPositions
     }
 
     update() {
         this.executeUserActions();
-        for (let i = 0; i < players.length; i++) {
-            let player = players[i];
+        for (let i = 0; i < this.players.length; i++) {
+            let player = this.players[i];
             if (player.alive) {
-                player.calculateNextMove();
+                player.playerPositions = this.getPlayerPositions();
+                let direction = player.calculateNextMove();
                 let position = player.position;
-                position.move();
+                position.move(direction);
                 if (Util.checkCoordinates(position.vector, this.grid)) {
-                    this.updateGrid(position.vector, player.id);
+                    this.updateGrid(position.vector, player.id, player.color);
                 } else {
                     player.alive = false;
                 }
@@ -67,17 +100,21 @@ class Game {
         this.pushDisplayChanges();
     }
 
-    updateGrid(c, value) {
+    updateGrid(c, value, color='#000000') {
         this.grid[c[0]][c[1]] = value;
         for (let i = 0; i < this.players.length; i++) {
-            this.players[i].grid[c[0]][c[1]] = value;
+            if (this.players[i].grid != null) {
+                this.players[i].grid[c[0]][c[1]] = value;
+            }
         }
-        this.currentDisplayChange.push({x: c[0], y: c[1], value: value})
+        this.currentDisplayChange.push({x: c[0], y: c[1], value: value, color: color});
     }
 
     pushDisplayChanges() {
-        this.displayChangeHistory.push({step: this.counter++, changes: this.currentDisplayChange});
-        this.currentDisplayChange = [];
+        if (this.currentDisplayChange.length > 0) {
+            this.displayChangeHistory.push({step: this.counter++, changes: this.currentDisplayChange});
+            this.currentDisplayChange = [];
+        }
     }
 
     executeUserActions() {
@@ -96,9 +133,13 @@ class Game {
 
     getPlayerPositions() {
         let positions = [];
-        for (let i = 0; i < players.length; i++) {
-            let player = players[i];
-            positions.push(player.position)
+        for (let i = 0; i < this.players.length; i++) {
+            let player = this.players[i];
+            if (player.alive) {
+                positions.push([player.position.x, player.position.y]);
+            } else {
+                positions.push(null);
+            }
         }
         return positions;
     }

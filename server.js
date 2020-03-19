@@ -32,10 +32,8 @@ io.on('connection', function (socket) {
 });
 
 // ========== LOCAL STUFF ==========
-app.use(express.static(path.join(__dirname, 'public/css')));
-app.use(express.static(path.join(__dirname, 'public/views')));
-app.use(express.static(path.join(__dirname, 'public/controllers')));
-app.use(express.static(path.join(__dirname, 'public/assets')));
+app.use(express.static(path.join(__dirname, '.')));
+app.use(express.static(path.join(__dirname, './public/assets')));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 

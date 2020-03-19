@@ -48,6 +48,9 @@ class Util {
     }
 
     static shortestPath(c1, c2, grid) {
+        if (c2 == null) {
+            return {nextStep: null, metric: Number.MAX_SAFE_INTEGER};
+        }
         let adjacent = this.getAdjacent(c1, grid);
         let distances = [];
         let c2RemovedGrid = this.clone2DArray(grid);
@@ -73,6 +76,9 @@ class Util {
     }
 
     static voronoi(c1, c2, grid) {
+        if (c2 == null) {
+            return {voronoi_grid: null, metric: Number.MAX_SAFE_INTEGER};
+        }
         let c1_bfs_grid = this.bfs(c1, grid).bfs_grid;
         let c2_bfs_grid = this.bfs(c2, grid).bfs_grid;
         let voronoi_grid = this.subtract2DArrays(c2_bfs_grid, c1_bfs_grid);
@@ -226,14 +232,22 @@ let c1 = [0, 0];
 let c2 = [2, 2];
 let grid = [[1, 0, 0], [0, 0, 0], [0, 0, 9]];
 
-let degree = Util.getDegree(c1, grid);
-let adjacent = Util.getAdjacent(c1, grid, true);
-let bfs_result = Util.bfs(c1, grid);
-let voronoi_result = Util.voronoi(c1, c2, grid);
-let shortest_path_result = Util.shortestPath(c1, c2, grid);
-let evaluator = new Evaluator();
-evaluator.addCriteria(new MaxCriteria(EvalFunctions.voronoiEval));
-evaluator.addCriteria(new MinCriteria(EvalFunctions.shortestPathEval));
-evaluator.addCriteria(new MaxCriteria(EvalFunctions.bfsEval));
-evaluator.addCriteria(new MinCriteria(EvalFunctions.degreeEval));
-let decision = evaluator.makeDecision(c1, c2, grid);
+// let degree = Util.getDegree(c1, grid);
+// let adjacent = Util.getAdjacent(c1, grid, true);
+// let bfs_result = Util.bfs(c1, grid);
+// let voronoi_result = Util.voronoi(c1, c2, grid);
+// let shortest_path_result = Util.shortestPath(c1, c2, grid);
+// let evaluator = new Evaluator();
+// evaluator.addCriteria(new MaxCriteria(EvalFunctions.voronoiEval));
+// evaluator.addCriteria(new MinCriteria(EvalFunctions.shortestPathEval));
+// evaluator.addCriteria(new MaxCriteria(EvalFunctions.bfsEval));
+// evaluator.addCriteria(new MinCriteria(EvalFunctions.degreeEval));
+// let decision = evaluator.makeDecision(c1, c2, grid);
+
+// exports.Util = Util;
+// exports.EvalFunctions = EvalFunctions;
+// exports.Criteria = Criteria;
+// exports.MinCriteria = MinCriteria;
+// exports.MaxCriteria = MaxCriteria;
+// exports.Evaluator = Evaluator;
+// exports.EvalFunctions = EvalFunctions;
