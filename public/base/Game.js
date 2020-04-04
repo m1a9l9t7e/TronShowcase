@@ -1,15 +1,14 @@
 class Game {
     players = [];
-    ups;
     counter;
 
     width;
     height;
     grid;
 
+    currentDisplayChange;
+    displayChangeHistory;
     userActions = [];
-    currentDisplayChange = [];
-    displayChangeHistory = [];
 
     constructor(gameSettings) {
         this.players = gameSettings.players;
@@ -20,6 +19,8 @@ class Game {
 
     initialize() {
         this.counter = 0;
+        this.currentDisplayChange = [];
+        this.displayChangeHistory = [];
         this.grid = this.generateGrid();
         let startingPositions = this.generateStartingPositions();
         for (let i = 0; i < this.players.length; i++) {
