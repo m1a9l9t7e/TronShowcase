@@ -152,6 +152,10 @@ class EvalFunctions {
     static degreeEval(c1, c2, grid) {
         return Util.getDegree(c1, grid);
     }
+
+    static noEval(c1, c2, grid) {
+        return 1;
+    }
 }
 
 class Criteria {
@@ -209,11 +213,16 @@ class Evaluator {
         this.criteria.push(criteria);
     }
 
-    makeDecision(c1, c2, grid) {
+    evaluateOptions(c1, c2, grid) {
         let options = [true, true, true, true];
         for (let i = 0; i < this.criteria.length; i++) {
             options = this.criteria[i].evaluate(c1, c2, grid, options);
         }
+        return options;
+    }
+
+    makeDecision(c1, c2, grid) {
+        let options = this.evaluateOptions(c1, c2, grid);
 
         let decision = null;
         for (let i = 0; i < options.length; i++) {
@@ -226,11 +235,46 @@ class Evaluator {
     }
 }
 
+class RandomEvaluator extends Evaluator {
+
+    makeDecision(c1, c2, grid) {
+        let options = this.evaluateOptions(c1, c2, grid);
+
+        let validDecisions = [];
+        for (let i = 0; i < options.length; i++) {
+            if (options[i]) {
+                validDecisions.push(i);
+            }
+        }
+        if (validDecisions.length === 0) {
+            return 0;
+        } else {
+            let decisionIndex = Math.floor(Math.random() * validDecisions.length);
+            return validDecisions[decisionIndex];
+        }
+    }
+}
+
+class ListAllEvaluator extends Evaluator {
+
+    makeDecision(c1, c2, grid) {
+        let options = this.evaluateOptions(c1, c2, grid);
+
+        let validDecisions = [];
+        for (let i = 0; i < options.length; i++) {
+            if (options[i]) {
+                validDecisions.push(i);
+            }
+        }
+        return validDecisions;
+    }
+}
+
 // Testing
 
-let c1 = [0, 0];
-let c2 = [2, 2];
-let grid = [[1, 0, 0], [0, 0, 0], [0, 0, 9]];
+// let c1 = [0, 0];
+// let c2 = [2, 2];
+// let grid = [[1, 0, 0], [0, 0, 0], [0, 0, 9]];
 
 // let degree = Util.getDegree(c1, grid);
 // let adjacent = Util.getAdjacent(c1, grid, true);

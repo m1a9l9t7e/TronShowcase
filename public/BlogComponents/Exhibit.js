@@ -83,7 +83,7 @@ class Exhibit extends BlogComponent {
 
 
     get html() {
-        return '<div class="graph-display-container rounded shadow-lg bg-dark mx-auto my-5 p-2">\n' +
+        return '<div class="graph-display-container rounded shadow-lg mx-auto my-5 p-2">\n' +
             '    <div id="' + this.id + '" class="graph-display container"></div>\n' +
             '</div>'
     }

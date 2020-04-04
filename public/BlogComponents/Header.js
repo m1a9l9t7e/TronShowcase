@@ -9,7 +9,7 @@ class Header extends BlogComponent {
     }
     get html() {
         let title = '<h3>' + this.title + '</h3>';
-        let icon = '<img class="title-icon mx-auto mt-2" src="' + this.icon_name + '"/>';
+        let icon = '<img class="title-icon mx-auto mt-2 mb-5" src="' + this.icon_name + '"/>';
         return '<div class="mt-2 d-flex flex-column">' + title + icon + '</div>'
     }
 }

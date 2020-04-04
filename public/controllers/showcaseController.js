@@ -5,7 +5,7 @@ let passage_welcome_1 = new TextPassage(
     "to the development of an Algorithm for the game Tron like the one you see below:"
 );
 
-let gameSettings_advanced = new GameSettings(5, 5, [new WallHuggingAI("huggie", '#0000ff')]);
+let gameSettings_advanced = new GameSettings(11, 11, [new SeekerAI("seeker", '#ff0000'), new PowerHungryAI("power!", '#ff00ff')]);
 let showcase_welcome = new Exhibit('welcome', gameSettings_advanced, false, false);
 
 let passage_welcome_2 = new TextPassage(
@@ -15,7 +15,7 @@ let passage_welcome_2 = new TextPassage(
 
 let passage_welcome_3 = new TextPassage(
     "The final algorithm can be a bit daunting, as is often the case with ideas and products that " +
-    "have gone through many iterations of development." +
+    "have gone through many iterations of development. " +
     "But I promise you will understand all of it and might come out a smarter person at the end."
 );
 
@@ -30,7 +30,7 @@ let header_nothing = new Header(
 
 let passage_nothing_1 = new TextPassage(
     "What is the easiest thing we can do to start off? Well, nothing really. " +
-    "We just start of going in a random direction until we run into a wall and die."
+    "We just start by going in a random direction until we run into a wall and die."
 );
 
 let gameSettings_nothing = new GameSettings(5, 5, [new NothingAI("", '#333333')]);
@@ -47,15 +47,15 @@ let header_basic = new Header(
 
 let passage_basic_1 = new TextPassage(
     "To avoid running into walls," +
-    "we just turn left or right at will whenever there is a wall directly in front of us!" +
+    "we just turn left or right at will whenever there is a wall directly in front of us! " +
     "Let's see that in action."
 );
 
-let gameSettings_basic = new GameSettings(5, 5, [new NothingAI("", '#009999')]);
+let gameSettings_basic = new GameSettings(5, 5, [new BasicAI("", '#009999')], new RectangularObstaclesGrid(8), new FairMirrored());
 let showcase_basic = new Exhibit('basic', gameSettings_basic, false, false);
 
 let passage_basic_2 = new TextPassage(
-    "As you can see this works great when the field is empty, but let's see what happens when we introduce some obstacles\n" +
+    "As you can see this works great when the field is empty, but let's see what happens when we introduce some obstacles " +
     "into the mix."
 );
 

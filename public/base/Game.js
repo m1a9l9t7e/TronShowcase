@@ -1,10 +1,13 @@
 class Game {
-    players = [];
-    counter;
-
     width;
     height;
     grid;
+
+    gridBehavior;
+    startingPositionBehavior;
+
+    players = [];
+    counter;
 
     currentDisplayChange;
     displayChangeHistory;
@@ -14,6 +17,8 @@ class Game {
         this.players = gameSettings.players;
         this.width = gameSettings.width;
         this.height = gameSettings.height;
+        this.gridBehavior = gameSettings.gridBehavior;
+        this.startingPositionBehavior = gameSettings.startingPositionBehavior;
         this.initialize();
     }
 
@@ -21,8 +26,9 @@ class Game {
         this.counter = 0;
         this.currentDisplayChange = [];
         this.displayChangeHistory = [];
-        this.grid = this.generateGrid();
-        let startingPositions = this.generateStartingPositions();
+        this.grid = this.gridBehavior.generateGrid(this.width, this.height);
+        this.drawGrid();
+        let startingPositions = this.startingPositionBehavior.generateStartingPositions(this.grid, this.players.length);
         for (let i = 0; i < this.players.length; i++) {
             let player = this.players[i];
             let startingPosition = startingPositions[i];
@@ -34,52 +40,14 @@ class Game {
         this.pushDisplayChanges();
     }
 
-    generateGrid() {
-        let grid = [];
+    drawGrid() {
         for (let i = 0; i < this.width; i++) {
-            let row = [];
             for (let j = 0; j < this.height; j++) {
-                row.push(0);
-            }
-            grid.push(row);
-        }
-        return grid;
-    }
-
-    generateStartingPositions() {
-        let width = this.width - 1;
-        let height = this.height - 1;
-        let startingPositions = [];
-        if (this.players.length === 1) {
-            let x = Math.floor(Math.random() * width);
-            let y = Math.floor(Math.random() * height);
-            startingPositions.push([x, y])
-        } else if (this.players.length === 2) {
-            let x = Math.floor(Math.random() * width);
-            let y = Math.floor(Math.random() * height);
-            startingPositions.push([x, y]);
-            this.updateGrid([x, y], 1);
-            let x2 = width - x;
-            let y2 = height - y;
-            if (Util.checkCoordinates([x2, y2], this.grid)) {
-                startingPositions.push([x2, y2]);
-            } else {
-                startingPositions.push([x2 + ((this.width +1) % 2), y2 + ((this.height +1) % 2)])
-            }
-        } else {
-            for (let i = 0; i < this.players.length; i++) {
-                while (true) {
-                    let x = Math.floor(Math.random() * width);
-                    let y = Math.floor(Math.random() * height);
-                    if (Util.checkCoordinates([x, y], this.grid)) {
-                        startingPositions.push([x, y]);
-                        this.updateGrid([x, y], 1);
-                        break;
-                    }
+                if (this.grid[i][j] !== 0) {
+                    this.currentDisplayChange.push({x: i, y: j, value: this.grid[i][j], color: '#000000'});
                 }
             }
         }
-        return startingPositions
     }
 
     update() {

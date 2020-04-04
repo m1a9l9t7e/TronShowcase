@@ -41,8 +41,8 @@ app.use(session);
 
 // ========== EXPRESS ==========
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/public/views/showcase.html'));
-    // res.redirect(req.baseUrl + '/game');
+    // res.sendFile(path.join(__dirname + '/public/views/showcase.html'));
+    res.sendFile(path.join(__dirname + '/public/views/test.html'));
 });
 
 

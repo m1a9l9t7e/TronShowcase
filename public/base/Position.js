@@ -16,6 +16,7 @@ class Position {
     }
 
     move(direction) {
+        this.direction = direction;
         this.x += this.xVec[direction];
         this.y += this.yVec[direction];
     }
