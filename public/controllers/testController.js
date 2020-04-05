@@ -5,7 +5,12 @@ let header_basic = new Header(
     "random.png"
 );
 
-let gameSettings_basic = new GameSettings(10, 10, [new BasicAI("", '#009999')], new RectangularObstaclesGrid(40), new FairMirrored());
+let gameSettings_basic = new GameSettings(
+    5, 5,
+    [new BasicAI("", '#009999'), new SeekerAI("", '#ff9999')],
+    new RandomObstaclesDecorator(new NullDecorator(), 5),
+    new FairMirrored()
+);
 // let gameSettings_basic = new GameSettings(5, 5, [new BasicAI("", '#009999')], new EmptyGrid(), new FairMirrored());
 let showcase_basic = new Exhibit('basic', gameSettings_basic, false, false);
 

@@ -13,12 +13,14 @@ class FairMirrored extends StartingPositionBehavior {
         let width = grid.length;
         let height = grid[0].length;
         let startingPositions = [];
+        let x, y = 0;
         if (numPlayers === 1 || numPlayers === 2) {
             while (true) {
-                let x = Math.floor(Math.random() * width);
-                let y = Math.floor(Math.random() * height);
+                x = Math.floor(Math.random() * width);
+                y = Math.floor(Math.random() * height);
                 if (Util.checkCoordinates([x, y], grid)) {
                     startingPositions.push([x, y]);
+                    grid[x][y] = 1;
                     break;
                 }
                 if (counter++ > this.maxTimeout) {
@@ -26,8 +28,8 @@ class FairMirrored extends StartingPositionBehavior {
                 }
             }
             if (numPlayers === 2) {
-                let x2 = width - x;
-                let y2 = height - y;
+                let x2 = width - x - 1;
+                let y2 = height - y - 1;
                 if (Util.checkCoordinates([x2, y2], grid)) {
                     startingPositions.push([x2, y2]);
                 } else {
@@ -37,10 +39,11 @@ class FairMirrored extends StartingPositionBehavior {
         } else {
             for (let i = 0; i < numPlayers; i++) {
                 while (true) {
-                    let x = Math.floor(Math.random() * width);
-                    let y = Math.floor(Math.random() * height);
+                    x = Math.floor(Math.random() * width);
+                    y = Math.floor(Math.random() * height);
                     if (Util.checkCoordinates([x, y], grid)) {
                         startingPositions.push([x, y]);
+                        grid[x][y] = 1;
                         break;
                     }
                     if (counter++ > this.maxTimeout) {

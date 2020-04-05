@@ -4,6 +4,7 @@ class Game {
     grid;
 
     gridBehavior;
+    gridDecorator;
     startingPositionBehavior;
 
     players = [];
@@ -17,7 +18,7 @@ class Game {
         this.players = gameSettings.players;
         this.width = gameSettings.width;
         this.height = gameSettings.height;
-        this.gridBehavior = gameSettings.gridBehavior;
+        this.gridDecorator = gameSettings.gridDecorator;
         this.startingPositionBehavior = gameSettings.startingPositionBehavior;
         this.initialize();
     }
@@ -26,7 +27,8 @@ class Game {
         this.counter = 0;
         this.currentDisplayChange = [];
         this.displayChangeHistory = [];
-        this.grid = this.gridBehavior.generateGrid(this.width, this.height);
+        this.grid = this.initializeEmptyGrid(this.width, this.height);
+        this.grid = this.gridDecorator.decorate(this.grid);
         this.drawGrid();
         let startingPositions = this.startingPositionBehavior.generateStartingPositions(this.grid, this.players.length);
         for (let i = 0; i < this.players.length; i++) {
@@ -38,6 +40,18 @@ class Game {
             this.updateGrid(startingPositions[i], this.players[i].id, this.players[i].color);
         }
         this.pushDisplayChanges();
+    }
+
+    initializeEmptyGrid(width, height) {
+        let grid = [];
+        for (let i = 0; i < width; i++) {
+            let row = [];
+            for (let j = 0; j < height; j++) {
+                row.push(0);
+            }
+            grid.push(row);
+        }
+        return grid;
     }
 
     drawGrid() {
