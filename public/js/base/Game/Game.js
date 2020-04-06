@@ -3,12 +3,13 @@ class Game {
     height;
     grid;
 
-    gridBehavior;
     gridDecorator;
     startingPositionBehavior;
 
     players = [];
     counter;
+    lastPlayerTimeout;
+    finished;
 
     currentDisplayChange;
     displayChangeHistory;
@@ -18,6 +19,7 @@ class Game {
         this.players = gameSettings.players;
         this.width = gameSettings.width;
         this.height = gameSettings.height;
+        this.lastPlayerTimeout = gameSettings.lastPlayerTimeout;
         this.gridDecorator = gameSettings.gridDecorator;
         this.startingPositionBehavior = gameSettings.startingPositionBehavior;
         this.initialize();
@@ -25,6 +27,7 @@ class Game {
 
     initialize() {
         this.counter = 0;
+        this.finished = false;
         this.currentDisplayChange = [];
         this.displayChangeHistory = [];
         this.grid = this.initializeEmptyGrid(this.width, this.height);
@@ -65,6 +68,7 @@ class Game {
     }
 
     update() {
+        let numPlayersAlive = 0;
         this.executeUserActions();
         for (let i = 0; i < this.players.length; i++) {
             let player = this.players[i];
@@ -75,12 +79,22 @@ class Game {
                 position.move(direction);
                 if (Util.checkCoordinates(position.vector, this.grid)) {
                     this.updateGrid(position.vector, player.id, player.color);
+                    numPlayersAlive += 1;
                 } else {
                     player.alive = false;
                 }
             }
         }
         this.pushDisplayChanges();
+        if (numPlayersAlive === 1) {
+            if (this.lastPlayerTimeout === 0) {
+                this.finished = true;
+            } else {
+                this.lastPlayerTimeout -= 1;
+            }
+        }  else if (numPlayersAlive < 1) {
+            this.finished = true;
+        }
     }
 
     updateGrid(c, value, color='#000000') {
@@ -141,10 +155,6 @@ class Game {
     }
 
     isFinished() {
-        let playerAlive = false;
-        for (let i = 0; i < this.players.length; i++) {
-            playerAlive = playerAlive || this.players[i].alive;
-        }
-        return !playerAlive;
+        return this.finished;
     }
 }

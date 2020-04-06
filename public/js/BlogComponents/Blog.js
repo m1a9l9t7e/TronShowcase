@@ -1,6 +1,12 @@
 class Blog {
     elements = [];
 
+    constructor(elements) {
+        for (let i = 0; i < elements.length; i++) {
+            this.addElement(elements[i]);
+        }
+    }
+
     addElement(element) {
         this.elements.push(element);
     }

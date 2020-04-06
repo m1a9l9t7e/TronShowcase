@@ -33,6 +33,7 @@ io.on('connection', function (socket) {
 
 // ========== LOCAL STUFF ==========
 app.use(express.static(path.join(__dirname, '.')));
+app.use(express.static(path.join(__dirname, './public/js')));
 app.use(express.static(path.join(__dirname, './public/assets')));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -41,8 +42,8 @@ app.use(session);
 
 // ========== EXPRESS ==========
 app.get('/', function (req, res) {
-    // res.sendFile(path.join(__dirname + '/public/views/showcase.html'));
-    res.sendFile(path.join(__dirname + '/public/views/test.html'));
+    res.sendFile(path.join(__dirname + '/public/views/showcase.html'));
+    // res.sendFile(path.join(__dirname + '/public/views/test.html'));
 });
 
 
