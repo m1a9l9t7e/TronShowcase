@@ -27,6 +27,7 @@
     background-color: #ffffff;
     border: 1px black solid;
     z-index: 5;
+    overflow: hidden
 }
 
 .title-icon {
@@ -42,8 +43,13 @@ body {
     color: white;
     /*font-family: 'Roboto';*/
     font-family: 'Montserrat';
+    font-size: 18px;
 }
 
 h3 {
     font-family: 'Anton';font-size: 30px;
 }
+
+/*#menu ul, #menu li {*/
+/*    margin: 0; padding: 0;*/
+/*}*/

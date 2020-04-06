@@ -37,6 +37,10 @@ Sadly our algorithm is not very good at dealing with dead ends and finds itself 
 You might also have noticed that it is not very efficient in using up the space it has and often makes choices that
 cost it a lot of available space.
 
+Let's deal with these two problems one at a time.
+1. Avoid dead ends
+2. Use space more efficiently
+
 # The Space Loving Algorithm
 
 So how do we fix this problem? How do we avoid the dead ends?

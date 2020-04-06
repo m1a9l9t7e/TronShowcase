@@ -1,14 +1,15 @@
 class Game {
     width;
     height;
-    grid;
+    players = [];
+    lastPlayerTimeout;
 
+    grid;
     gridDecorator;
     startingPositionBehavior;
 
-    players = [];
     counter;
-    lastPlayerTimeout;
+    timeoutCounter;
     finished;
 
     currentDisplayChange;
@@ -22,12 +23,12 @@ class Game {
         this.lastPlayerTimeout = gameSettings.lastPlayerTimeout;
         this.gridDecorator = gameSettings.gridDecorator;
         this.startingPositionBehavior = gameSettings.startingPositionBehavior;
-        this.initialize();
     }
 
     initialize() {
         this.counter = 0;
         this.finished = false;
+        this.timeoutCounter = this.lastPlayerTimeout;
         this.currentDisplayChange = [];
         this.displayChangeHistory = [];
         this.grid = this.initializeEmptyGrid(this.width, this.height);
@@ -69,7 +70,10 @@ class Game {
 
     update() {
         let numPlayersAlive = 0;
+        // perform user action
         this.executeUserActions();
+
+        // perform ai action
         for (let i = 0; i < this.players.length; i++) {
             let player = this.players[i];
             if (player.alive) {
@@ -86,11 +90,13 @@ class Game {
             }
         }
         this.pushDisplayChanges();
+
+        // check finish condition
         if (numPlayersAlive === 1) {
-            if (this.lastPlayerTimeout === 0) {
+            if (this.timeoutCounter === 0) {
                 this.finished = true;
             } else {
-                this.lastPlayerTimeout -= 1;
+                this.timeoutCounter -= 1;
             }
         }  else if (numPlayersAlive < 1) {
             this.finished = true;
