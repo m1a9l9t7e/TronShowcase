@@ -67,11 +67,7 @@ let blog = new Blog([
     ),
     new TextPassage(
         "The final algorithm can be a bit daunting, as is often the case with ideas and products that " +
-        "have gone through many iterations of development. " +
-        "But I promise you will understand all of it and might come out a smarter person at the end."
-    ),
-    new TextPassage(
-        "So lets start at the very beginning."
+        "have gone through many iterations of development. So lets start at the very beginning."
     ),
     new Header(
     "The Nothing Algorithm",
@@ -153,7 +149,7 @@ let blog = new Blog([
         "target.png"
     ),
     new TextPassage(
-        "This algorithm seeks out the enemy like a heat seeking missile. " +
+        "This algorithm seeks out the enemy by moving directly towards it at all times. " +
         "Let's see how it performs against our space loving algorithm."
     ),
     new Exhibit('space-vs-seeker', gameSettings_space_vs_seeker, false, false),
